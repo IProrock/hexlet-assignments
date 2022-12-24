@@ -31,7 +31,7 @@ class AppTest {
     @Test
     void enlargeArrayImageEmpty() {
         String[][] image2 = {{}};
-        String[][] expected2 = {};
+        String[][] expected2 = {{},{}};
         assertThat(App.enlargeArrayImage(image2)).isEqualTo(expected2);
     }
 }
