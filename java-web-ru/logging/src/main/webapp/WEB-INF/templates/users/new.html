@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layouts/application.html}">
+
+<head>
+  <title>Sign Up</title>
+</head>
+<section layout:fragment="content">
+  <!-- BEGIN -->
+  <form action="/users/new" method="post" th:object="${user}">
+    <div class="mb-3">
+      <label>Email</label>
+      <input class="form-control" type="email" name="email" th:value="*{email}">
+    </div>
+    <div class="mb-3">
+      <label>FirstName</label>
+      <input class="form-control" type="firstName" name="firstName" th:value="*{firstName}">
+    </div>
+    <div class="mb-3">
+      <label>LastName</label>
+      <input class="form-control" type="lastName" name="lastName" th:value="*{lastName}">
+    </div>
+    <button class="btn btn-primary" type="submit">Войти</button>
+  </form>
+  <!-- END -->
+</section>
