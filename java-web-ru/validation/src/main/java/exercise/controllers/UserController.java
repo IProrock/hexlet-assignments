@@ -85,7 +85,7 @@ public final class UserController {
 
         } else {
             user.save();
-            ctx.attribute("flash", "Пользователь успешно создан");
+            ctx.sessionAttribute("flash", "Пользователь успешно создан");
 
             ctx.redirect("/users", 302);
         }
