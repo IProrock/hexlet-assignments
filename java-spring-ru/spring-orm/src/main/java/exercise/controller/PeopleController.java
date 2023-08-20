@@ -34,8 +34,11 @@ public class PeopleController {
 
     // BEGIN
     @PostMapping(path="")
-    public void createPerson(@RequestBody Person person) {
-        this.personRepository.save(person);
+    public void createPerson(@RequestBody PersonDto person) {
+        Person person1 = new Person();
+        person1.setFirstName(person.getFirstName());
+        person1.setLastName(person.getLastName());
+        this.personRepository.save(person1);
     }
 
     @DeleteMapping(path = "/{id}")
