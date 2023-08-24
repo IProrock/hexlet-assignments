@@ -49,11 +49,11 @@ public class CourseController {
 
         String[] strPartents = parents.split("\\.");
 
-        for (String parentId : strPartents) {
-            Course parent = courseRepository.findById((long) Long.parseLong(parentId));
-            result.add(parent);
-        }
-        return result;
+        List<Course> lst = Arrays.stream(strPartents)
+                .map(prnt -> courseRepository.findById(Long.parseLong(prnt)))
+                .collect(Collectors.toList());
+
+        return lst;
     }
 
     // END
