@@ -2,6 +2,8 @@ package exercise;
 
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import exercise.calculator.Calculator;
 import exercise.calculator.CalculatorImpl;
@@ -15,8 +17,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor{
 
-    private boolean toLog;
-    private String logLevel;
+    private final Map<String, String> toLogBeans= new HashMap<>();
     private Logger LOGGER = LoggerFactory.getLogger("Def Logger");
 
     @Override
@@ -24,11 +25,11 @@ public class CustomBeanPostProcessor implements BeanPostProcessor{
 
         Class beanClass = bean.getClass();
         if (beanClass.isAnnotationPresent(Inspect.class)) {
-            toLog = true;
+
 
             String logLevel = bean.getClass().getAnnotation(Inspect.class).level();
 
-            this.logLevel = logLevel;
+            toLogBeans.put(beanName, logLevel);
         }
 
         return bean;
@@ -38,14 +39,14 @@ public class CustomBeanPostProcessor implements BeanPostProcessor{
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
         Object resultBean = bean;
-        if (toLog) {
+        if (toLogBeans.containsKey(beanName)) {
             Object proxyCalculator = Proxy.newProxyInstance(
                     bean.getClass().getClassLoader(),
                     bean.getClass().getInterfaces(),
                     (proxy, method, args) -> {
                         if (method.getName().equals("sum")
                                 || method.getName().equals("mult")) {
-                            if (logLevel.equals("info")) {
+                            if (toLogBeans.get(beanName).equals("info")) {
                                 LOGGER.info("Was called method: " + method.getName() + "() with arguments: " + Arrays.toString(args));
                             } else {
                                 LOGGER.debug("Was called method: " + method.getName() + "() with arguments: " + Arrays.toString(args));
@@ -60,7 +61,6 @@ public class CustomBeanPostProcessor implements BeanPostProcessor{
             });
 
             resultBean = proxyCalculator;
-            toLog = false;
         }
 
         return resultBean;
